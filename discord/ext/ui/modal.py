@@ -25,10 +25,17 @@ class Modal(ui.Modal):
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
         inputted_values = []
-        for raw_component in interaction.data.get("components", []): # type: ignore
-            for component in self._components:
-                if raw_component.get("custom_id") == component.custom_id:
-                    inputted_values.append({f"{component.label}" : raw_component.get("value")})
+        modal_component = interaction.data.get("components",[]) # type: ignore
+        if modal_component == []:
+            pass
+        
+        else:
+            text_inputs = modal_component[0].get("components",[]) # type: ignore
+            for raw_input in text_inputs:
+                for component in self._components:
+                    if component.custom_id == raw_input.get("custom_id", ""):
+                        inputted_values.append(f"{component.label}: {raw_input.get('value', '')}")
+                        continue
         if self._hook is not None:
             await _call_any(self._hook, interaction, inputted_values)
         if not interaction.response.is_done():
