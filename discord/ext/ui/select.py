@@ -17,6 +17,7 @@ class Select(Item):
             options: Optional[list] = None,
             disabled: bool = False,
             custom_id: Optional[str] = None,
+            row: Optional[int] = None,
     ) -> None:
         self._placeholder: Optional[str] = placeholder
         self._min_values: int = min_values
@@ -25,6 +26,7 @@ class Select(Item):
         self._disabled: bool = disabled
         self._row: Optional[int] = None
         self._custom_id: Optional[str] = custom_id
+        self._row: Optional[int] = row
 
         self.func: Optional[Callable] = None
         self.check_func: Optional[Callable[[discord.Interaction], bool]] = None
@@ -74,7 +76,7 @@ class Select(Item):
             max_values=self._max_values,
             options=self._options,
             disabled=self._disabled,
-            row=row,
+            row=self._row or row,
             callback=self.func,
             check_func=self.check_func,
         )
