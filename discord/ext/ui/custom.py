@@ -17,9 +17,10 @@ class CustomButton(ui.Button):
             disabled: bool = False,
             emoji: Optional[Union[str, discord.PartialEmoji]] = None,
             custom_id: Optional[str] = None,
+            url: Optional[str] = None,
             modal_submit: Optional[Modal] = None
     ):
-        super().__init__(label=label, style=style, disabled=disabled, emoji=emoji, custom_id=custom_id)
+        super().__init__(label=label, style=style, disabled=disabled, emoji=emoji, custom_id=custom_id, url=url)
         self.callback_func: Optional[Callable] = None
         self.check_func: Optional[Callable[[discord.Interaction], bool]] = None
         self.modal_submit = modal_submit
