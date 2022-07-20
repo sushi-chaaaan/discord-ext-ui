@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from discord import ui
 import discord
 
@@ -11,6 +13,7 @@ class Modal(ui.Modal):
     def __init__(self, title: str, components: List[ui.TextInput]):
         super().__init__(title=title)
         for component in components:
+            component.custom_id = os.urandom(16).hex()
             self.add_item(component)
 
         self._hook = None
