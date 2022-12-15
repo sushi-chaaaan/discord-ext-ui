@@ -3,7 +3,7 @@ name = "discord-ext-ui"
 version = "0.1.0"
 description = ""
 authors = ["sushi-chaaaan <sushi_code@outlook.jp>"]
-readme = "README.md"
+readme = "README.rst"
 packages = [{ include = "discord/ext/ui" }]
 
 [tool.poetry.dependencies]
