@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["sushi-chaaaan <sushi_code@outlook.jp>"]
 readme = "README.md"
-# packages = [{ include = "discord_ext_ui" }]
+packages = [{ include = "discord.ext.ui" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
