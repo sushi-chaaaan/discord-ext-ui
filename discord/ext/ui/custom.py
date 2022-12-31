@@ -48,7 +48,7 @@ class CustomSelect(ui.Select):
             disabled: bool = False,
             row: Optional[int] = None,
             callback: Optional[Callable] = None,
-            check_func: Callable[[discord.Interaction], bool]
+            check_func: Optional[Callable[[discord.Interaction], bool]] = None
     ) -> None:
         custom_id = custom_id or MISSING
         options = options or MISSING
@@ -77,3 +77,164 @@ class CustomSelect(ui.Select):
                     selected_options.append(option)
                     continue
         await _call_any(self.callback_func, interaction, selected_options)
+
+
+class CustomRoleSelect(ui.RoleSelect):
+    def __init__(
+            self,
+            *,
+            custom_id: Optional[str],
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            disabled: bool = False,
+            row: Optional[int] = None,
+            callback: Optional[
+                Callable[[discord.Interaction, list[discord.Role]], None]
+            ] = None,
+            check_func: Optional[Callable[[discord.Interaction], bool]] = None
+    ) -> None:
+        custom_id = custom_id or MISSING
+        super(CustomRoleSelect, self).__init__(
+            custom_id=custom_id,
+            placeholder=placeholder,
+            min_values=min_values,
+            max_values=max_values,
+            disabled=disabled,
+            row=row
+        )
+        self.callback_func = callback
+        self.check_func = check_func
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        if self.callback_func is None:
+            return
+        if self.check_func is not None:
+            if not self.check_func(interaction):
+                return
+        await _call_any(self.callback_func, interaction, self.values)
+
+
+class CustomUserSelect(ui.UserSelect):
+    def __init__(
+            self,
+            *,
+            custom_id: Optional[str],
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            disabled: bool = False,
+            row: Optional[int] = None,
+            callback: Optional[
+                Callable[
+                    [discord.Interaction, list[Union[discord.Member, discord.User]]], None
+                ]
+            ] = None,
+            check_func: Optional[Callable[[discord.Interaction], bool]] = None
+    ) -> None:
+        custom_id = custom_id or MISSING
+        super(CustomUserSelect, self).__init__(
+            custom_id=custom_id,
+            placeholder=placeholder,
+            min_values=min_values,
+            max_values=max_values,
+            disabled=disabled,
+            row=row
+        )
+        self.callback_func = callback
+        self.check_func = check_func
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        if self.callback_func is None:
+            return
+        if self.check_func is not None:
+            if not self.check_func(interaction):
+                return
+        await _call_any(self.callback_func, interaction, self.values)
+
+
+class CustomMentionableSelect(ui.MentionableSelect):
+    def __init__(
+            self,
+            *,
+            custom_id: Optional[str],
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            disabled: bool = False,
+            row: Optional[int] = None,
+            callback: Optional[
+                Callable[
+                    [
+                        discord.Interaction,
+                        list[Union[discord.Role, discord.Member, discord.User]],
+                    ],
+                    None,
+                ]
+            ] = None,
+            check_func: Optional[Callable[[discord.Interaction], bool]] = None
+    ) -> None:
+        custom_id = custom_id or MISSING
+        super(CustomMentionableSelect, self).__init__(
+            custom_id=custom_id,
+            placeholder=placeholder,
+            min_values=min_values,
+            max_values=max_values,
+            disabled=disabled,
+            row=row
+        )
+        self.callback_func = callback
+        self.check_func = check_func
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        if self.callback_func is None:
+            return
+        if self.check_func is not None:
+            if not self.check_func(interaction):
+                return
+        await _call_any(self.callback_func, interaction, self.values)
+
+
+class CustomChannelSelect(ui.ChannelSelect):
+    def __init__(
+            self,
+            *,
+            custom_id: Optional[str],
+            channel_types: list[discord.ChannelType],
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            disabled: bool = False,
+            row: Optional[int] = None,
+            callback: Optional[
+                Callable[
+                    [
+                        discord.Interaction,
+                        list[Union[discord.abc.GuildChannel, discord.Thread]],
+                    ],
+                    None,
+                ]
+            ] = None,
+            check_func: Callable[[discord.Interaction], bool]
+    ) -> None:
+        custom_id = custom_id or MISSING
+        super(CustomChannelSelect, self).__init__(
+            custom_id=custom_id,
+            channel_types=channel_types,
+            placeholder=placeholder,
+            min_values=min_values,
+            max_values=max_values,
+            disabled=disabled,
+            row=row
+        )
+        self.callback_func = callback
+        self.check_func = check_func
+
+    async def callback(self, interaction: discord.Interaction) -> None:
+        if self.callback_func is None:
+            return
+        if self.check_func is not None:
+            if not self.check_func(interaction):
+                return
+        _resolved = [c.resolve() or await c.fetch() for c in self.values]
+        await _call_any(self.callback_func, interaction, _resolved)
