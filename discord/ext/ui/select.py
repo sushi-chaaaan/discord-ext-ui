@@ -74,7 +74,7 @@ class Select(Item):
             max_values=self._max_values,
             options=self._options,
             disabled=self._disabled,
-            row=row,
+            row=self._row or row,
             callback=self.func,
             check_func=self.check_func,
         )
@@ -239,7 +239,7 @@ class RoleSelect(Item):
             min_values=self._min_values,
             max_values=self._max_values,
             disabled=self._disabled,
-            row=row,
+            row=self._row or row,
             callback=self.func,
             check_func=self.check_func
         )
@@ -313,7 +313,7 @@ class UserSelect(Item):
             min_values=self._min_values,
             max_values=self._max_values,
             disabled=self._disabled,
-            row=row,
+            row=self._row or row,
             callback=self.func,
             check_func=self.check_func
         )
@@ -395,7 +395,7 @@ class MentionableSelect(Item):
             min_values=self._min_values,
             max_values=self._max_values,
             disabled=self._disabled,
-            row=row,
+            row=self._row or row,
             callback=self.func,
             check_func=self.check_func
         )
@@ -484,7 +484,7 @@ class ChannelSelect(Item):
             max_values=self._max_values,
             channel_types=self._channel_types,
             disabled=self._disabled,
-            row=row,
+            row=self._row or row,
             callback=self.func,
             check_func=self.check_func
         )

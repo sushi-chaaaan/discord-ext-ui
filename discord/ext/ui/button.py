@@ -14,11 +14,19 @@ class LinkButton(Item):
     def __init__(self, url: str, label: str):
         self.url = url
         self.label = label
+        self._row: Optional[int] = None
+
+    def row(self, row: int) -> 'LinkButton':
+        self._row = row
+        return self
 
     def to_discord_item(self, row: Optional[int]) -> ui.Item:
-        button = ui.Button(style=discord.ButtonStyle.link, label=self.label, url=self.url)
-        button.row = row
-        return button
+        return ui.Button(
+            style=discord.ButtonStyle.link,
+            label=self.label,
+            url=self.url,
+            row=self._row or row
+        )
 
 
 class Button(Item):
@@ -34,6 +42,7 @@ class Button(Item):
         self._label: str = label
         self._disabled: bool = disabled
         self._emoji: Optional[Union[str, discord.PartialEmoji]] = emoji
+        self._row: Optional[int] = None
         self._custom_id: Optional[str] = custom_id
 
         self.callback_func: Optional[Callable[[discord.Interaction], Any]] = None
@@ -66,6 +75,10 @@ class Button(Item):
         self._emoji = emoji
         return self
 
+    def row(self, row: int) -> Button:
+        self._row = row
+        return self
+
     def custom_id(self, custom_id: str) -> Button:
         self._custom_id = custom_id
         return self
@@ -88,11 +101,10 @@ class Button(Item):
             self._style,
             self._disabled,
             self._emoji,
+            self._row or row,
             self._custom_id,
             modal_submit=self.modal_submit
         )
         button.check_func = self.check_func
         button.callback_func = self.callback_func
-        button.row = row
         return button
-
