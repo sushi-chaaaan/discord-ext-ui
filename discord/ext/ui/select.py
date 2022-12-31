@@ -44,7 +44,7 @@ class Select(Item):
     def options(self, options: list[SelectOption]) -> 'Select':
         self._options = [op.to_discord_select_option() for op in options]
         return self
-    
+
     def disabled(self, disabled: bool = False) -> 'Select':
         self._disabled = disabled
         return self
