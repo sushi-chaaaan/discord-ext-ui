@@ -5,7 +5,7 @@ import discord
 from discord import ui
 
 from .item import Item
-from .custom import CustomSelect
+from .custom import CustomChannelSelect, CustomMentionableSelect, CustomRoleSelect, CustomSelect, CustomUserSelect
 
 
 class Select(Item):
@@ -177,4 +177,314 @@ class SelectOption:
             description=self._description,
             emoji=self._emoji,
             default=self._default
+        )
+
+
+class RoleSelect(Item):
+    def __init__(
+            self,
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            disabled: bool = False,
+            custom_id: Optional[str] = None,
+    ) -> None:
+        self._placeholder: Optional[str] = placeholder
+        self._min_values: int = min_values
+        self._max_values: int = max_values
+        self._disabled: bool = disabled
+        self._row: Optional[int] = None
+        self._custom_id: Optional[str] = custom_id
+
+        self.func: Optional[Callable[[discord.Interaction, list[discord.Role]], None]] = None
+        self.check_func: Optional[Callable[[discord.Interaction], bool]] = None
+
+    def placeholder(self, placeholder: str) -> 'RoleSelect':
+        self._placeholder = placeholder
+        return self
+
+    def min_values(self, min_values: int) -> 'RoleSelect':
+        self._min_values = min_values
+        return self
+
+    def max_values(self, max_values: int) -> 'RoleSelect':
+        self._max_values = max_values
+        return self
+
+    def disabled(self, disabled: bool = False) -> 'RoleSelect':
+        self._disabled = disabled
+        return self
+
+    def row(self, row: int) -> 'RoleSelect':
+        self._row = row
+        return self
+
+    def on_select(self, func: Callable) -> 'RoleSelect':
+        self.func = func
+
+        return self
+
+    def custom_id(self, custom_id: str) -> 'RoleSelect':
+        self._custom_id = custom_id
+        return self
+
+    def check(self, func: Callable[[discord.Interaction], bool]) -> 'RoleSelect':
+        self.check_func = func
+        return self
+
+    def to_discord_item(self, row: Optional[int]) -> ui.Item:
+        return CustomRoleSelect(
+            custom_id=self._custom_id,
+            placeholder=self._placeholder,
+            min_values=self._min_values,
+            max_values=self._max_values,
+            disabled=self._disabled,
+            row=row,
+            callback=self.func,
+            check_func=self.check_func
+        )
+
+
+class UserSelect(Item):
+    def __init__(
+            self,
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            disabled: bool = False,
+            custom_id: Optional[str] = None,
+    ) -> None:
+        self._placeholder: Optional[str] = placeholder
+        self._min_values: int = min_values
+        self._max_values: int = max_values
+        self._disabled: bool = disabled
+        self._row: Optional[int] = None
+        self._custom_id: Optional[str] = custom_id
+
+        self.func: Optional[
+            Callable[
+                [discord.Interaction, list[Union[discord.Member, discord.User]]], None
+            ]
+        ] = None
+        self.check_func: Optional[Callable[[discord.Interaction], bool]] = None
+
+    def placeholder(self, placeholder: str) -> 'UserSelect':
+        self._placeholder = placeholder
+        return self
+
+    def min_values(self, min_values: int) -> 'UserSelect':
+        self._min_values = min_values
+        return self
+
+    def max_values(self, max_values: int) -> 'UserSelect':
+        self._max_values = max_values
+        return self
+
+    def disabled(self, disabled: bool = False) -> 'UserSelect':
+        self._disabled = disabled
+        return self
+
+    def row(self, row: int) -> 'UserSelect':
+        self._row = row
+        return self
+
+    def on_select(
+        self,
+        func: Callable[
+            [discord.Interaction, list[Union[discord.Member, discord.User]]], None
+        ],
+    ) -> 'UserSelect':
+        self.func = func
+
+        return self
+
+    def custom_id(self, custom_id: str) -> 'UserSelect':
+        self._custom_id = custom_id
+        return self
+
+    def check(self, func: Callable[[discord.Interaction], bool]) -> 'UserSelect':
+        self.check_func = func
+        return self
+
+    def to_discord_item(self, row: Optional[int]) -> ui.Item:
+        return CustomUserSelect(
+            custom_id=self._custom_id,
+            placeholder=self._placeholder,
+            min_values=self._min_values,
+            max_values=self._max_values,
+            disabled=self._disabled,
+            row=row,
+            callback=self.func,
+            check_func=self.check_func
+        )
+
+
+class MentionableSelect(Item):
+    def __init__(
+            self,
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            disabled: bool = False,
+            custom_id: Optional[str] = None,
+    ) -> None:
+        self._placeholder: Optional[str] = placeholder
+        self._min_values: int = min_values
+        self._max_values: int = max_values
+        self._disabled: bool = disabled
+        self._row: Optional[int] = None
+        self._custom_id: Optional[str] = custom_id
+
+        self.func: Optional[
+            Callable[
+                [
+                    discord.Interaction,
+                    list[Union[discord.Role, discord.Member, discord.User]],
+                ],
+                None,
+            ]
+        ] = None
+        self.check_func: Optional[Callable[[discord.Interaction], bool]] = None
+
+    def placeholder(self, placeholder: str) -> 'MentionableSelect':
+        self._placeholder = placeholder
+        return self
+
+    def min_values(self, min_values: int) -> 'MentionableSelect':
+        self._min_values = min_values
+        return self
+
+    def max_values(self, max_values: int) -> 'MentionableSelect':
+        self._max_values = max_values
+        return self
+
+    def disabled(self, disabled: bool = False) -> 'MentionableSelect':
+        self._disabled = disabled
+        return self
+
+    def row(self, row: int) -> 'MentionableSelect':
+        self._row = row
+        return self
+
+    def on_select(
+        self,
+        func: Callable[
+            [
+                discord.Interaction,
+                list[Union[discord.Role, discord.Member, discord.User]],
+            ],
+            None,
+        ],
+    ) -> 'MentionableSelect':
+        self.func = func
+
+        return self
+
+    def custom_id(self, custom_id: str) -> 'MentionableSelect':
+        self._custom_id = custom_id
+        return self
+
+    def check(self, func: Callable[[discord.Interaction], bool]) -> 'MentionableSelect':
+        self.check_func = func
+        return self
+
+    def to_discord_item(self, row: Optional[int]) -> ui.Item:
+        return CustomMentionableSelect(
+            custom_id=self._custom_id,
+            placeholder=self._placeholder,
+            min_values=self._min_values,
+            max_values=self._max_values,
+            disabled=self._disabled,
+            row=row,
+            callback=self.func,
+            check_func=self.check_func
+        )
+
+
+class ChannelSelect(Item):
+    def __init__(
+            self,
+            placeholder: Optional[str] = None,
+            min_values: int = 1,
+            max_values: int = 1,
+            channel_types: Optional[list[discord.ChannelType]] = None,
+            disabled: bool = False,
+            custom_id: Optional[str] = None,
+    ) -> None:
+        self._placeholder: Optional[str] = placeholder
+        self._min_values: int = min_values
+        self._max_values: int = max_values
+        self._channel_types: Optional[list[discord.ChannelType]] = channel_types
+        self._disabled: bool = disabled
+        self._row: Optional[int] = None
+        self._custom_id: Optional[str] = custom_id
+
+        self.func: Optional[
+            Callable[
+                [
+                    discord.Interaction,
+                    list[Union[discord.abc.GuildChannel, discord.Thread]],
+                ],
+                None,
+            ]
+        ] = None
+        self.check_func: Optional[Callable[[discord.Interaction], bool]] = None
+
+    def placeholder(self, placeholder: str) -> 'ChannelSelect':
+        self._placeholder = placeholder
+        return self
+
+    def min_values(self, min_values: int) -> 'ChannelSelect':
+        self._min_values = min_values
+        return self
+
+    def max_values(self, max_values: int) -> 'ChannelSelect':
+        self._max_values = max_values
+        return self
+
+    def channel_types(self, channel_types: list[discord.ChannelType]) -> 'ChannelSelect':
+        self._channel_types = channel_types
+        return self
+
+    def disabled(self, disabled: bool = False) -> 'ChannelSelect':
+        self._disabled = disabled
+        return self
+
+    def row(self, row: int) -> 'ChannelSelect':
+        self._row = row
+        return self
+
+    def on_select(
+        self,
+        func: Callable[
+            [
+                discord.Interaction,
+                list[Union[discord.abc.GuildChannel, discord.Thread]],
+            ],
+            None,
+        ]
+    ) -> 'ChannelSelect':
+        self.func = func
+
+        return self
+
+    def custom_id(self, custom_id: str) -> 'ChannelSelect':
+        self._custom_id = custom_id
+        return self
+
+    def check(self, func: Callable[[discord.Interaction], bool]) -> 'ChannelSelect':
+        self.check_func = func
+        return self
+
+    def to_discord_item(self, row: Optional[int]) -> ui.Item:
+        return CustomChannelSelect(
+            custom_id=self._custom_id,
+            placeholder=self._placeholder,
+            min_values=self._min_values,
+            max_values=self._max_values,
+            channel_types=self._channel_types,
+            disabled=self._disabled,
+            row=row,
+            callback=self.func,
+            check_func=self.check_func
         )
