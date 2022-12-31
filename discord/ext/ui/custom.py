@@ -200,7 +200,7 @@ class CustomChannelSelect(ui.ChannelSelect):
             self,
             *,
             custom_id: Optional[str],
-            channel_types: list[discord.ChannelType],
+            channel_types: Optional[list[discord.ChannelType]],
             placeholder: Optional[str] = None,
             min_values: int = 1,
             max_values: int = 1,
@@ -215,15 +215,16 @@ class CustomChannelSelect(ui.ChannelSelect):
                     None,
                 ]
             ] = None,
-            check_func: Callable[[discord.Interaction], bool]
+            check_func: Optional[Callable[[discord.Interaction], bool]] = None
     ) -> None:
         custom_id = custom_id or MISSING
+        channel_types = channel_types or MISSING
         super(CustomChannelSelect, self).__init__(
             custom_id=custom_id,
-            channel_types=channel_types,
             placeholder=placeholder,
             min_values=min_values,
             max_values=max_values,
+            channel_types=channel_types,
             disabled=disabled,
             row=row
         )
