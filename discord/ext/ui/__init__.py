@@ -10,11 +10,18 @@ from .message import Message as Message
 from .observable_object import ObservableObject as ObservableObject
 from .state import state as state
 from .published import published as published
-from .select import SelectOption as SelectOption, Select as Select
+from .select import (
+    SelectOption as SelectOption,
+    Select as Select,
+    RoleSelect as RoleSelect,
+    UserSelect as UserSelect,
+    MentionableSelect as MentionableSelect,
+    ChannelSelect as ChannelSelect
+)
 from .page import (
     PaginationView as PaginationView,
     PaginationButtons as PaginationButtons,
-    PageView as PageView,
+    PageView as PageView
 )
 from .alert import Alert as Alert, ActionButton as ActionButton
 from .modal import Modal as Modal
