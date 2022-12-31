@@ -90,13 +90,13 @@ class SelectOption:
             default: bool = False
     ) -> None:
         self._label: str = label
-        self._value: Optional[str] = label if value is None else value
+        self._value: str = label if value is None else value
         self._description: Optional[str] = description
 
         if isinstance(emoji, str):
             emoji = discord.PartialEmoji.from_str(emoji)
 
-        self._emoji: Optional[str] = emoji
+        self._emoji: Optional[discord.PartialEmoji] = emoji
         self._default: bool = default
 
     def label(self, label: str) -> 'SelectOption':
